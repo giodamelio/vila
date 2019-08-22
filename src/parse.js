@@ -7,4 +7,4 @@ module.exports = async function parse(openAPISpecPath) {
   const specParsed = yaml.safeLoad(specRaw);
 
   return specParsed;
-}
+};
