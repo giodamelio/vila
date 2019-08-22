@@ -3,10 +3,18 @@ const path = require('path');
 const parse = require('../src/parse');
 
 describe('Parse OpenAPI specs', () => {
-  it('Parse Yaml spec', async () => {
+  it('Parse YAML spec', async () => {
     expect.assertions(1);
     const spec = await parse(path.join(__dirname, 'openapi_specs/simple.yaml'));
 
+    expect(spec).toBeDefined();
+  });
+
+  it('Parse JSON spec', async () => {
+    expect.assertions(1);
+    const spec = await parse(path.join(__dirname, 'openapi_specs/simple.json'));
+
+    console.log(spec);
     expect(spec).toBeDefined();
   });
 
