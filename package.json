@@ -19,7 +19,8 @@
   },
   "homepage": "https://github.com/giodamelio/vila#readme",
   "dependencies": {
-    "js-yaml": "^3.13.1"
+    "js-yaml": "^3.13.1",
+    "semver": "^6.3.0"
   },
   "devDependencies": {
     "jest": "^24.9.0",

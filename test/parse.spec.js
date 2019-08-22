@@ -14,7 +14,6 @@ describe('Parse OpenAPI specs', () => {
     expect.assertions(1);
     const spec = await parse(path.join(__dirname, 'openapi_specs/simple.json'));
 
-    console.log(spec);
     expect(spec).toBeDefined();
   });
 
@@ -25,6 +24,21 @@ describe('Parse OpenAPI specs', () => {
       parse('this file does not exist')
     ).rejects.toThrowErrorMatchingInlineSnapshot(
       `"ENOENT: no such file or directory, open 'this file does not exist'"`
+    );
+  });
+
+  it('Version must match OpenAPI 3.x', async () => {
+    expect.assertions(2);
+
+    await expect(
+      parse(path.join(__dirname, 'openapi_specs/swagger_version_2.json'))
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `"Input must be an OpenAPI spec"`
+    );
+    await expect(
+      parse(path.join(__dirname, 'openapi_specs/openapi_version_4.json'))
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `"Input must be an OpenAPI whose version matches 3.x"`
     );
   });
 });
