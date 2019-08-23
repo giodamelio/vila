@@ -20,6 +20,7 @@
   "homepage": "https://github.com/giodamelio/vila#readme",
   "dependencies": {
     "js-yaml": "^3.13.1",
+    "lowdb": "^1.0.0",
     "semver": "^6.3.0"
   },
   "devDependencies": {

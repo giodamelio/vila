@@ -11,20 +11,12 @@ describe('Parse OpenAPI specs', () => {
       );
     });
 
-    it('Properly build operationId to route map', () => {
-      expect.assertions(3);
+    it('Propertly insert routes into database', async () => {
+      expect.assertions(2);
 
-      expect(spec._operationIdToRoute).toBeDefined();
-      expect(spec._operationIdToRoute.size).toBe(1);
-      expect(spec._operationIdToRoute).toMatchSnapshot();
-    });
-
-    it('Properly build method and path to route map', () => {
-      expect.assertions(3);
-
-      expect(spec._methodAndPathToRoute).toBeDefined();
-      expect(spec._methodAndPathToRoute.size).toBe(1);
-      expect(spec._methodAndPathToRoute).toMatchSnapshot();
+      const routes = spec._routesDB.get('routes').filter({}).value();
+      expect(routes).toHaveLength(1);
+      expect(routes).toMatchSnapshot();
     });
   });
 

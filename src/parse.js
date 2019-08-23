@@ -2,20 +2,22 @@ const fs = require('fs').promises;
 
 const yaml = require('js-yaml');
 const semver = require('semver');
+const lowdb = require('lowdb');
+const LowDBMemoryStore = require('lowdb/adapters/Memory');
 
 module.exports = class OpenAPI {
   constructor(spec) {
     this.spec = spec;
 
-    // Build up some maps to make access easier
-    this._operationIdToRoute = new Map();
-    this._methodAndPathToRoute = new Map();
+    // Insert the routes into the db
+    const db = lowdb(new LowDBMemoryStore());
+    db.defaults({ routes: [] }).write();
     for (let [path, methods] of Object.entries(this.spec.paths)) {
       for (let [method, route] of Object.entries(methods)) {
-        this._operationIdToRoute.set(route.operationId, route);
-        this._methodAndPathToRoute.set(`${method.toUpperCase()} ${path}`, route);
+        db.get('routes').push(route).write();
       }
     }
+    this._routesDB = db;
   }
 
   static async fromFile(specPath) {
@@ -36,6 +38,6 @@ module.exports = class OpenAPI {
   }
 
   getRouteByOperationId(operationId) {
-    return this._operationIdToRoute.get(operationId);
+    return this._routesDB.get('routes').find({ operationId }).value();
   }
 };
