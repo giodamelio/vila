@@ -1,12 +1,13 @@
 const path = require('path');
 
-const parse = require('../src/parse');
+const OpenAPI = require('../src/parse');
 
 describe('Parse OpenAPI specs', () => {
-  describe('parse()', () => {
+  describe('fromFile()', () => {
     it('Parse YAML spec', async () => {
       expect.assertions(1);
-      const spec = await parse(
+
+      const spec = await OpenAPI.fromFile(
         path.join(__dirname, 'openapi_specs/simple.yaml')
       );
 
@@ -15,7 +16,8 @@ describe('Parse OpenAPI specs', () => {
 
     it('Parse JSON spec', async () => {
       expect.assertions(1);
-      const spec = await parse(
+
+      const spec = await OpenAPI.fromFile(
         path.join(__dirname, 'openapi_specs/simple.json')
       );
 
@@ -26,7 +28,7 @@ describe('Parse OpenAPI specs', () => {
       expect.assertions(1);
 
       await expect(
-        parse('this file does not exist')
+        OpenAPI.fromFile('this file does not exist')
       ).rejects.toThrowErrorMatchingInlineSnapshot(
         `"ENOENT: no such file or directory, open 'this file does not exist'"`
       );
@@ -36,12 +38,16 @@ describe('Parse OpenAPI specs', () => {
       expect.assertions(2);
 
       await expect(
-        parse(path.join(__dirname, 'openapi_specs/swagger_version_2.json'))
+        OpenAPI.fromFile(
+          path.join(__dirname, 'openapi_specs/swagger_version_2.json')
+        )
       ).rejects.toThrowErrorMatchingInlineSnapshot(
         `"Input must be an OpenAPI spec"`
       );
       await expect(
-        parse(path.join(__dirname, 'openapi_specs/openapi_version_4.json'))
+        OpenAPI.fromFile(
+          path.join(__dirname, 'openapi_specs/openapi_version_4.json')
+        )
       ).rejects.toThrowErrorMatchingInlineSnapshot(
         `"Input must be an OpenAPI whose version matches 3.x"`
       );
