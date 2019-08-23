@@ -32,4 +32,8 @@ module.exports = class OpenAPI {
 
     return new this(specParsed);
   }
+
+  getRouteByOperationId(operationId) {
+    return this._operationIdToRoute.get(operationId);
+  }
 };

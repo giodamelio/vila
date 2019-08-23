@@ -67,4 +67,25 @@ describe('Parse OpenAPI specs', () => {
       );
     });
   });
+
+  describe('getRouteByOperationId()', () => {
+    let spec;
+    beforeAll(async () => {
+      spec = await OpenAPI.fromFile(
+        path.join(__dirname, 'openapi_specs/simple.yaml')
+      );
+    });
+
+    it('Get a route by its operation id', () => {
+      expect.assertions(1);
+
+      expect(spec.getRouteByOperationId('echo')).toMatchSnapshot();
+    });
+
+    it('Get a route by its operation id', () => {
+      expect.assertions(1);
+
+      expect(spec.getRouteByOperationId('thisOperationIdDoesNotExist')).not.toBeDefined();
+    });
+  });
 });
