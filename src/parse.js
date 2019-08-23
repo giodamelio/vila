@@ -9,9 +9,11 @@ module.exports = class OpenAPI {
 
     // Build up some maps to make access easier
     this._operationIdToRoute = new Map();
+    this._methodAndPathToRoute = new Map();
     for (let [path, methods] of Object.entries(this.spec.paths)) {
       for (let [method, route] of Object.entries(methods)) {
         this._operationIdToRoute.set(route.operationId, route);
+        this._methodAndPathToRoute.set(`${method.toUpperCase()} ${path}`, route);
       }
     }
   }

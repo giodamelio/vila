@@ -4,16 +4,27 @@ const OpenAPI = require('../src/parse');
 
 describe('Parse OpenAPI specs', () => {
   describe('constructor()', () => {
-    it('Properly build operationId to route map', async () => {
-      expect.assertions(3);
-
-      const spec = await OpenAPI.fromFile(
+    let spec;
+    beforeAll(async () => {
+      spec = await OpenAPI.fromFile(
         path.join(__dirname, 'openapi_specs/simple.yaml')
       );
+    });
+
+    it('Properly build operationId to route map', () => {
+      expect.assertions(3);
 
       expect(spec._operationIdToRoute).toBeDefined();
       expect(spec._operationIdToRoute.size).toBe(1);
       expect(spec._operationIdToRoute).toMatchSnapshot();
+    });
+
+    it('Properly build method and path to route map', () => {
+      expect.assertions(3);
+
+      expect(spec._methodAndPathToRoute).toBeDefined();
+      expect(spec._methodAndPathToRoute.size).toBe(1);
+      expect(spec._methodAndPathToRoute).toMatchSnapshot();
     });
   });
 
