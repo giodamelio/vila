@@ -6,6 +6,14 @@ const semver = require('semver');
 module.exports = class OpenAPI {
   constructor(spec) {
     this.spec = spec;
+
+    // Build up some maps to make access easier
+    this._operationIdToRoute = new Map();
+    for (let [path, methods] of Object.entries(this.spec.paths)) {
+      for (let [method, route] of Object.entries(methods)) {
+        this._operationIdToRoute.set(route.operationId, route);
+      }
+    }
   }
 
   static async fromFile(specPath) {

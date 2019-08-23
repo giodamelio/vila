@@ -1,0 +1,56 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Parse OpenAPI specs constructor() Properly build operationId to route map 1`] = `
+Map {
+  "echo" => Object {
+    "operationId": "echo",
+    "requestBody": Object {
+      "content": Object {
+        "application/json": Object {
+          "example": "{
+  \\"message\\": \\"Hello Echo Server!\\"
+}
+",
+          "schema": Object {
+            "$ref": "#/components/schemas/EchoBody",
+          },
+        },
+      },
+      "description": "Message with some additional info from the server",
+      "required": true,
+    },
+    "responses": Object {
+      "200": Object {
+        "content": Object {
+          "application/json": Object {
+            "example": "{
+  \\"message\\": \\"Hello Echo Server!\\",
+  \\"length\\": 18
+}
+",
+            "schema": Object {
+              "$ref": "#/components/schemas/EchoResponse",
+            },
+          },
+        },
+        "description": "Successfull echo",
+      },
+      "400": Object {
+        "content": Object {
+          "application/json": Object {
+            "example": "{
+  \\"error\\": \\"No message sent!\\"
+}
+",
+            "schema": Object {
+              "$ref": "#/components/schemas/EchoError",
+            },
+          },
+        },
+        "description": "No message sent",
+      },
+    },
+    "summary": "Echo a string back",
+  },
+}
+`;
