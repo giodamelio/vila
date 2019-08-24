@@ -14,7 +14,9 @@ module.exports = class OpenAPI {
     db.defaults({ routes: [] }).write();
     for (let [path, methods] of Object.entries(this.spec.paths)) {
       for (let [method, route] of Object.entries(methods)) {
-        db.get('routes').push(route).write();
+        db.get('routes')
+          .push({ ...route, method, path })
+          .write();
       }
     }
     this._routesDB = db;
@@ -37,7 +39,17 @@ module.exports = class OpenAPI {
     return new this(specParsed);
   }
 
-  getRouteByOperationId(operationId) {
-    return this._routesDB.get('routes').find({ operationId }).value();
+  findRoute(filter) {
+    return this._routesDB
+      .get('routes')
+      .filter(filter)
+      .value();
+  }
+
+  findOneRoute(filter) {
+    return this._routesDB
+      .get('routes')
+      .find(filter)
+      .value();
   }
 };

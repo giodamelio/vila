@@ -14,7 +14,10 @@ describe('Parse OpenAPI specs', () => {
     it('Propertly insert routes into database', async () => {
       expect.assertions(2);
 
-      const routes = spec._routesDB.get('routes').filter({}).value();
+      const routes = spec._routesDB
+        .get('routes')
+        .filter({})
+        .value();
       expect(routes).toHaveLength(1);
       expect(routes).toMatchSnapshot();
     });
@@ -71,7 +74,7 @@ describe('Parse OpenAPI specs', () => {
     });
   });
 
-  describe('getRouteByOperationId()', () => {
+  describe('findOneRoute()', () => {
     let spec;
     beforeAll(async () => {
       spec = await OpenAPI.fromFile(
@@ -82,13 +85,38 @@ describe('Parse OpenAPI specs', () => {
     it('Get a route by its operation id', () => {
       expect.assertions(1);
 
-      expect(spec.getRouteByOperationId('echo')).toMatchSnapshot();
+      expect(spec.findOneRoute({ operationId: 'echo' })).toMatchSnapshot();
+    });
+
+    it('No routes matching', () => {
+      expect.assertions(1);
+
+      expect(
+        spec.findOneRoute({ operationId: 'thisOperationIdDoesNotExist' })
+      ).not.toBeDefined();
+    });
+  });
+
+  describe('findRoute()', () => {
+    let spec;
+    beforeAll(async () => {
+      spec = await OpenAPI.fromFile(
+        path.join(__dirname, 'openapi_specs/simple.yaml')
+      );
     });
 
     it('Get a route by its operation id', () => {
       expect.assertions(1);
 
-      expect(spec.getRouteByOperationId('thisOperationIdDoesNotExist')).not.toBeDefined();
+      expect(spec.findRoute({ operationId: 'echo' })).toMatchSnapshot();
+    });
+
+    it('No routes matching', () => {
+      expect.assertions(1);
+
+      expect(
+        spec.findRoute({ operationId: 'thisOperationIdDoesNotExist' })
+      ).toEqual([]);
     });
   });
 });
