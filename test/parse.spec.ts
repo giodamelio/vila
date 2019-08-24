@@ -1,6 +1,6 @@
-const path = require('path');
+import path from 'path';
 
-const OpenAPI = require('../src/parse');
+import OpenAPI from '../src/parse';
 
 describe('Parse OpenAPI specs', () => {
   describe('constructor()', () => {
