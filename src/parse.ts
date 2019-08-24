@@ -9,7 +9,7 @@ import { OpenAPIV3 } from 'openapi-types';
 
 export default class OpenAPI {
   spec: OpenAPIV3.Document;
-  _routesDB: lowdb.LowdbSync<any>;
+  _routesDB: lowdb.LowdbSync<object>;
 
   constructor(spec: OpenAPIV3.Document) {
     this.spec = spec;
@@ -17,17 +17,18 @@ export default class OpenAPI {
     // Insert the routes into the db
     const db = lowdb(new LowDBMemoryStore(''));
     db.defaults({ routes: [] }).write();
-    for (let [path, methods] of Object.entries(this.spec.paths)) {
-      for (let [method, route] of Object.entries(methods)) {
+    for (const [path, methods] of Object.entries(this.spec.paths)) {
+      for (const [method, route] of Object.entries(methods)) {
         // `as any` is a nasty hack because of bug it lowdb/lodash type definitions
         // https://github.com/typicode/lowdb/issues/233
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (db.get('routes') as any).push({ ...route, method, path }).write();
       }
     }
     this._routesDB = db;
   }
 
-  static async fromFile(specPath: string) {
+  static async fromFile(specPath: string): Promise<OpenAPI> {
     const specRaw = await fs.readFile(specPath);
 
     // Since YAML is a superset of JSON there is no need to special case per extention
@@ -44,15 +45,17 @@ export default class OpenAPI {
     return new this(specParsed);
   }
 
-  findRoute(filter: object) {
+  findRoute(filter: object): object[] {
     // `as any` is a nasty hack because of bug it lowdb/lodash type definitions
     // https://github.com/typicode/lowdb/issues/233
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (this._routesDB.get('routes') as any).filter(filter).value();
   }
 
-  findOneRoute(filter: object) {
+  findOneRoute(filter: object): object {
     // `as any` is a nasty hack because of bug it lowdb/lodash type definitions
     // https://github.com/typicode/lowdb/issues/233
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (this._routesDB.get('routes') as any).find(filter).value();
   }
 }
