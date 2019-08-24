@@ -7,6 +7,7 @@
   "scripts": {
     "test": "jest",
     "format": "prettier --write '{src,test}/**/*.{ts,json,yaml}'",
+    "check-format": "prettier --check '{src,test}/**/*.{ts,json,yaml}'",
     "lint": "eslint '{src,test}/**/*.ts'"
   },
   "repository": {

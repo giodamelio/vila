@@ -12,9 +12,11 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - name: npm install and test
+    - name: npm install, check formatting, lint and test
       run: |
         npm install
+        npm run check-format
+        npm run lint
         npm test
       env:
         CI: true
